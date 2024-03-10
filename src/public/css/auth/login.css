@@ -1,0 +1,33 @@
+.login-form__inner {
+    text-align: center;
+}
+
+input {
+    line-height: 40px;
+    width: 35%;
+    margin: 5px auto;
+    border-radius: 5px;
+    border: solid 2px #858383;
+}
+
+.registration-options {
+    margin: 20px auto 300px;
+}
+
+.registration_guidance{
+    margin-bottom: 0;
+    color: #5c5b5b;
+}
+
+
+.register-button {
+    margin-top: 5px;
+    text-decoration: none;
+    color: #1631e6;
+    font-weight: bold;
+}
+
+.register-form__error-message {
+    color: #FF9494;
+    margin-top: 0;
+}
