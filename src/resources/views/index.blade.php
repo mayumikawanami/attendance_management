@@ -52,7 +52,7 @@
         </button>
 
         <!-- 勤務終了ボタン -->
-        <button type="submit" name="action" value="endWork" @if($attendanceStatus!='startWork' &&$attendanceStatus=='endWork' ) disabled @endif>
+        <button type="submit" name="action" value="endWork" @if($attendanceStatus!='startWork' && $attendanceStatus!='endBreak' ||$attendanceStatus=='endWork' ||$attendanceStatus=='startBreak' ) disabled @endif>
             勤務終了
         </button>
 
@@ -62,7 +62,7 @@
         </button>
 
         <!-- 休憩終了ボタン -->
-        <button type="submit" name="action" value="endBreak" @if($attendanceStatus!='startWork' &&$attendanceStatus!='startBreak' || $attendanceStatus=='endBreak' ||$attendanceStatus=='endWork' )disabled @endif>
+        <button type="submit" name="action" value="endBreak" @if($attendanceStatus!='startWork' && $attendanceStatus!='startBreak' || $attendanceStatus=='endBreak' ||$attendanceStatus=='endWork' ||$attendanceStatus=='startWork' )disabled @endif>
             休憩終了
         </button>
 
