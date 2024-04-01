@@ -23,6 +23,11 @@
 <div class="attendance-form">
     <h2 class="attendance-form__heading content__heading"></h2>
     <div class="attendance-form__container">
+        <div class="date-navigation">
+            <a href="{{ route('attendance', ['date' => $previousDate]) }}" class="date-navigation__button">&lt;</a>
+            <span class="current-date">{{ $selectedDate }}</span>
+            <a href="{{ route('attendance', ['date' => $nextDate]) }}" class="date-navigation__button">&gt;</a>
+        </div>
         <table class="attendance__table">
             <tr class="attendance__row">
                 <th class="attendance__label">名前</th>
@@ -31,27 +36,59 @@
                 <th class="attendance__label">休憩時間</th>
                 <th class="attendance__label">勤務時間</th>
             </tr>
-            <!--
-            @foreach($contacts as $contact)
-            <tr class="admin__row">
-                <td class="admin__data">{{$contact->first_name}}{{$contact->last_name}}</td>
-                <td class="admin__data">
-                    @if($contact->gender == 1)
-                    男性
-                    @elseif($contact->gender == 2)
-                    女性
-                    @else
-                    その他
-                    @endif
+            @if($attendanceData->isNotEmpty())
+            @foreach($attendanceData as $attendance)
+            <tr class="attendance__row">
+                <td class="attendance__data">{{ $attendance->user_name }}</td>
+                <td class="attendance__data">{{ $attendance->start_time }}</td>
+                <td class="attendance__data">{{ $attendance->end_time }}</td>
+                <td class="attendance__data"><?php
+                                                $startBreak = strtotime($attendance->break_start_time);
+                                                $endBreak = strtotime($attendance->break_end_time);
+                                                $totalBreakTimeInSeconds = $endBreak - $startBreak;
+                                                $hours = floor($totalBreakTimeInSeconds / 3600);
+                                                $minutes = floor(($totalBreakTimeInSeconds % 3600) / 60);
+                                                $seconds = $totalBreakTimeInSeconds % 60;
+                                                // ゼロパディングして2桁表示にする
+                                                $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
+                                                $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
+                                                $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
+                                                ?>
+                    {{ $formattedHours }}:{{ $formattedMinutes }}:{{ $formattedSeconds }}
                 </td>
-                <td class="admin__data">{{$contact->email}}</td>
-                <td class="admin__data">{{$contact->category->content}}</td>
-                <td class="admin__data">
-                    <a class="admin__detail-btn" href="#{{$contact->id}}">詳細</a>
+                <td class="attendance__data"><?php
+                                                $startTime = strtotime($attendance->start_time);
+                                                $endTime = strtotime($attendance->end_time);
+                                                $totalWorkTimeInSeconds = $endTime - $startTime;
+
+                                                // トータル休憩時間を取得
+                                                $breakStartTime = strtotime($attendance->break_start_time);
+                                                $breakEndTime = strtotime($attendance->break_end_time);
+                                                $totalBreakTimeInSeconds = $breakEndTime - $breakStartTime;
+
+                                                // 勤務時間から休憩時間を引く
+                                                $totalWorkTimeInSeconds -= $totalBreakTimeInSeconds;
+
+                                                $hours = floor($totalWorkTimeInSeconds / 3600);
+                                                $minutes = floor(($totalWorkTimeInSeconds % 3600) / 60);
+                                                $seconds = $totalWorkTimeInSeconds % 60;
+                                                // ゼロパディングして2桁表示にする
+                                                $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
+                                                $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
+                                                $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
+                                                ?>
+                    {{ $formattedHours }}:{{ $formattedMinutes }}:{{ $formattedSeconds }}
                 </td>
             </tr>
-            -->
-            {{ $contacts->links('vendor.pagination.default') }}<!-- テーブル名を確認-->
+            @endforeach
+            @else
+            <tr>
+                <td colspan="5">勤怠データがありません</td>
+            </tr>
+            @endif
+
+
         </table>
     </div>
 </div>
+@endsection

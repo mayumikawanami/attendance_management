@@ -20,7 +20,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', [AttendanceController::class, 'index']);
     Route::post('/record', [AttendanceController::class, 'record']);
-
+    Route::get('/attendance', [AttendanceController::class, 'attendance'])->name('attendance');
 
     Route::get('/register',[RegisteredUserController::class, 'create']);
     Route::post('/register', [RegisteredUserController::class, 'store']);

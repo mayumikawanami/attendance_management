@@ -1,0 +1,60 @@
+.attendance-form {
+    margin-top: 20px;
+    padding: 0 50px;
+}
+
+.attendance-form__container {
+    margin-top: 20px;
+}
+
+.date-navigation {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.date-navigation__button {
+    display: inline-block;
+    padding: 3px 10px;
+    background-color: #fff;
+    color: #032bf4;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.date-navigation__button:hover {
+    background-color: #0056b3;
+}
+
+.attendance__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance__row {
+    border: 1px solid #888585;
+    border-left: none;
+        /* 左側の境界線を削除 */
+        border-right: none;
+        /* 右側の境界線を削除 */
+}
+
+.attendance__row:nth-child(even) {
+    background-color: #e9e9e9;
+}
+
+.attendance__label {
+    padding: 20px;
+    font-weight: bold;
+}
+
+.attendance__data {
+    padding: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.current-date {
+    font-weight: bold;
+    font-size: 20px;
+}

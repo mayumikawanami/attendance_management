@@ -11,6 +11,7 @@ class Attendance extends Model
 
     protected $table = 'attendances';
 
+
     protected $fillable = [
         'user_id',
         'stamp_date',
@@ -27,4 +28,11 @@ class Attendance extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+
+
 }
+
+
+

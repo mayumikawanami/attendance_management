@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Http\Requests\AttendanceRequest;
-use App\Models\Attendance;
+use Carbon\Carbon; // Carbonライブラリを使用するために追加
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class AttendanceController extends Controller
 {
@@ -12,19 +16,53 @@ class AttendanceController extends Controller
     {
         $todayDate = now()->format('Y-m-d');
 
-        // 当日の打刻回数を取得
-        $dailyWorkCount = Attendance::where('user_id', auth()->user()->id)
-            ->whereDate('created_at', $todayDate)
-            ->count();
-
         // ユーザーの最後の打刻アクションを取得
         $lastAction = Attendance::where('user_id', auth()->user()->id)
-        ->orderBy('created_at', 'desc')
-        ->first();
+            ->orderBy('created_at', 'desc')
+            ->first();
 
         $attendanceStatus = $lastAction ? $lastAction->action : null;
-        $breakButtonsDisabled = ($attendanceStatus == 'startBreak' || $attendanceStatus == 'endBreak');
-        return view('index', compact('todayDate','attendanceStatus', 'breakButtonsDisabled'));
+
+        // もし今日の日付が前回のアクションと違う場合、状態をリセット
+        if ($lastAction && $lastAction->stamp_date->format('Y-m-d') !== $todayDate) {
+            $attendanceStatus = null;
+        }
+
+        return view('index', compact('todayDate', 'attendanceStatus'));
+    }
+
+    public function attendance(Request $request)
+    {
+        // リクエストから日付を取得する（もしくはデフォルトの日付を使用する）
+        $selectedDate = $request->input('date', now()->format('Y-m-d'));
+
+        // 前の日付を計算
+        $previousDate = date('Y-m-d', strtotime($selectedDate . ' -1 day'));
+
+        // 次の日付を計算
+        $nextDate = date('Y-m-d', strtotime($selectedDate . ' +1 day'));
+
+
+            $attendanceData = Attendance::select(
+                'users.name as user_name', // ユーザー名を取得するためにユーザーテーブルを結合
+                'stamp_date',
+                DB::raw('MAX(CASE WHEN action = "startWork" THEN start_time END) AS start_time'),
+                DB::raw('MAX(CASE WHEN action = "endWork" THEN end_time END) AS end_time'),
+                DB::raw('MAX(CASE WHEN action = "startBreak" THEN break_start_time END) AS break_start_time'),
+                DB::raw('MAX(CASE WHEN action = "endBreak" THEN break_end_time END) AS break_end_time'),
+                
+            DB::raw('TIMESTAMPDIFF(MINUTE, MAX(CASE WHEN action = "startBreak" THEN break_start_time END), MAX(CASE WHEN action = "endBreak" THEN break_end_time END)) AS total_break_time'),
+                DB::raw('TIMESTAMPDIFF(MINUTE, MAX(CASE WHEN action = "startWork" THEN start_time END), MAX(CASE WHEN action = "endWork" THEN end_time END)) AS total_work_time')
+            )
+            ->join('users', 'users.id',
+                '=',
+                'attendances.user_id'
+            ) // ユーザーテーブルを結合
+            ->where('stamp_date', $selectedDate)
+                ->groupBy('users.name', 'stamp_date') // ユーザー名と日付でグループ化
+                ->get();
+
+        return view('attendance', compact('selectedDate', 'previousDate', 'nextDate', 'attendanceData'));
     }
 
     public function record(Request $request)
@@ -48,7 +86,6 @@ class AttendanceController extends Controller
             'action' => $request->action,
             'stamp_date' => now()->format('Y-m-d'),
         ]);
-
     }
 
     private function processAttendance(Request $request, array $formData)
@@ -97,7 +134,6 @@ class AttendanceController extends Controller
             'break_start_time' => $formData['action'] == 'startBreak' ? now() : null,
             'break_end_time' => $formData['action'] == 'endBreak' ? now() : null,
         ]);
-
         $attendance->save();
 
         return redirect()->back()->with('success', $message);
