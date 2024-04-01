@@ -15,17 +15,20 @@ class AttendanceController extends Controller
     public function index()
     {
         $todayDate = now()->format('Y-m-d');
+        $attendanceStatus = null;
 
-        // ユーザーの最後の打刻アクションを取得
-        $lastAction = Attendance::where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+        if (auth()->check()) {
+            // ユーザーの最後の打刻アクションを取得
+            $lastAction = Attendance::where('user_id', auth()->user()->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
 
-        $attendanceStatus = $lastAction ? $lastAction->action : null;
-
-        // もし今日の日付が前回のアクションと違う場合、状態をリセット
-        if ($lastAction && $lastAction->stamp_date->format('Y-m-d') !== $todayDate) {
-            $attendanceStatus = null;
+            // もし今日の日付が前回のアクションと違う場合、状態をリセット
+            if ($lastAction && $lastAction->stamp_date->format('Y-m-d') !== $todayDate) {
+                $attendanceStatus = null;
+            } else {
+                $attendanceStatus = $lastAction ? $lastAction->action : null;
+            }
         }
 
         return view('index', compact('todayDate', 'attendanceStatus'));
@@ -48,19 +51,16 @@ class AttendanceController extends Controller
                 'stamp_date',
                 DB::raw('MAX(CASE WHEN action = "startWork" THEN start_time END) AS start_time'),
                 DB::raw('MAX(CASE WHEN action = "endWork" THEN end_time END) AS end_time'),
-                DB::raw('MAX(CASE WHEN action = "startBreak" THEN break_start_time END) AS break_start_time'),
-                DB::raw('MAX(CASE WHEN action = "endBreak" THEN break_end_time END) AS break_end_time'),
-                
-            DB::raw('TIMESTAMPDIFF(MINUTE, MAX(CASE WHEN action = "startBreak" THEN break_start_time END), MAX(CASE WHEN action = "endBreak" THEN break_end_time END)) AS total_break_time'),
+                DB::raw('GROUP_CONCAT(CASE WHEN action = "startBreak" THEN break_start_time END) AS break_start_times'),
+                DB::raw('GROUP_CONCAT(CASE WHEN action = "endBreak" THEN break_end_time END) AS break_end_times'),
+
                 DB::raw('TIMESTAMPDIFF(MINUTE, MAX(CASE WHEN action = "startWork" THEN start_time END), MAX(CASE WHEN action = "endWork" THEN end_time END)) AS total_work_time')
             )
-            ->join('users', 'users.id',
-                '=',
-                'attendances.user_id'
-            ) // ユーザーテーブルを結合
+            ->join('users', 'users.id','=','attendances.user_id')
+             // ユーザーテーブルを結合
             ->where('stamp_date', $selectedDate)
-                ->groupBy('users.name', 'stamp_date') // ユーザー名と日付でグループ化
-                ->get();
+            ->groupBy('users.name', 'stamp_date') // ユーザー名と日付でグループ化
+            ->get();
 
         return view('attendance', compact('selectedDate', 'previousDate', 'nextDate', 'attendanceData'));
     }

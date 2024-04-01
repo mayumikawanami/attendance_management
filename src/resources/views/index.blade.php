@@ -47,7 +47,7 @@
         <input type="hidden" name="stamp_date" value="{{ $todayDate }}">
 
         <!-- 勤務開始ボタン -->
-        <button type="submit" name="action" value="startWork" @if($attendanceStatus=='startWork' || $attendanceStatus=='endWork' || $attendanceStatus=='startBreak' || $attendanceStatus=='endBreak' ) disabled @endif>
+        <button type="submit" name="action" value="startWork" @if(!auth()->check() ||$attendanceStatus=='startWork' || $attendanceStatus=='endWork' || $attendanceStatus=='startBreak' || $attendanceStatus=='endBreak' ) disabled @endif>
             勤務開始
         </button>
 
