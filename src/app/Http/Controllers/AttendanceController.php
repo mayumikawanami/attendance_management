@@ -60,7 +60,7 @@ class AttendanceController extends Controller
              // ユーザーテーブルを結合
             ->where('stamp_date', $selectedDate)
             ->groupBy('users.name', 'stamp_date') // ユーザー名と日付でグループ化
-            ->get();
+            ->paginate(5); // ページネーションで1ページあたり5件表示
 
         return view('attendance', compact('selectedDate', 'previousDate', 'nextDate', 'attendanceData'));
     }

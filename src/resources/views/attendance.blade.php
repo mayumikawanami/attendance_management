@@ -44,60 +44,82 @@
                 <td class="attendance__data">{{ $attendance->end_time }}</td>
                 <td class="attendance__data">
                     <?php
-                    // 各休憩時間の開始時刻と終了時刻を取得し、処理する
+                    // 休憩開始時刻と終了時刻を取得する
                     $breakStartTimes = explode(',', $attendance->break_start_times);
                     $breakEndTimes = explode(',', $attendance->break_end_times);
 
-                    $totalBreakTimeInSeconds = 0;
-                    // 各休憩時間の差分を合計する
-                    for ($i = 0; $i < count($breakStartTimes); $i++) {
-                        $startBreak = strtotime($breakStartTimes[$i]);
-                        $endBreak = strtotime($breakEndTimes[$i]);
-                        $totalBreakTimeInSeconds += $endBreak - $startBreak;
+                    // 休憩開始が打刻されているかをチェックする
+                    $isBreakStarted = !empty($breakStartTimes) && $breakStartTimes[0] !== '';
+
+                    // 休憩終了が打刻されているかをチェックする
+                    $isBreakEnded = !empty($breakEndTimes) && $breakEndTimes[0] !== '';
+
+                    // 休憩開始が打刻されている場合は、休憩時間を計算する
+                    if ($isBreakStarted && $isBreakEnded && count($breakStartTimes) === count($breakEndTimes)) {
+                        // 各休憩時間の差分を合計する
+                        $totalBreakTimeInSeconds = 0;
+                        for ($i = 0; $i < count($breakStartTimes); $i++) {
+                            $startBreak = strtotime($breakStartTimes[$i]);
+                            $endBreak = strtotime($breakEndTimes[$i]);
+                            $totalBreakTimeInSeconds += $endBreak - $startBreak;
+                        }
+
+                        // 合計休憩時間を時分秒に変換する
+                        $hours = floor($totalBreakTimeInSeconds / 3600);
+                        $minutes = floor(($totalBreakTimeInSeconds % 3600) / 60);
+                        $seconds = $totalBreakTimeInSeconds % 60;
+
+                        // ゼロパディングして2桁表示にする
+                        $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
+                        $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
+                        $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
+
+                        echo $formattedHours . ':' . $formattedMinutes . ':' . $formattedSeconds;
+                    } else {
+                        // 休憩開始が打刻されていない場合は何も表示しない
+                        echo '';
                     }
-
-                    // 合計休憩時間を時分秒に変換する
-                    $hours = floor($totalBreakTimeInSeconds / 3600);
-                    $minutes = floor(($totalBreakTimeInSeconds % 3600) / 60);
-                    $seconds = $totalBreakTimeInSeconds % 60;
-
-                    // ゼロパディングして2桁表示にする
-                    $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
-                    $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
-                    $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
                     ?>
-                    {{ $formattedHours }}:{{ $formattedMinutes }}:{{ $formattedSeconds }}
                 </td>
+
+
 
                 <td class="attendance__data">
                     <?php
                     $startTime = strtotime($attendance->start_time);
                     $endTime = strtotime($attendance->end_time);
-                    $totalWorkTimeInSeconds = $endTime - $startTime;
 
-                    // 各休憩時間の開始時刻と終了時刻を取得し、処理する
-                    $breakStartTimes = explode(',', $attendance->break_start_times);
-                    $breakEndTimes = explode(',', $attendance->break_end_times);
+                    // 勤務時間が打刻されていない場合は何も表示しない
+                    if ($startTime !== false && $endTime !== false) {
+                        $totalWorkTimeInSeconds = $endTime - $startTime;
 
-                    $totalBreakTimeInSeconds = 0;
-                    // 各休憩時間の差分を合計する
-                    for ($i = 0; $i < count($breakStartTimes); $i++) {
-                        $startBreak = strtotime($breakStartTimes[$i]);
-                        $endBreak = strtotime($breakEndTimes[$i]);
-                        $totalBreakTimeInSeconds += $endBreak - $startBreak;
+                        // 各休憩時間の開始時刻と終了時刻を取得し、処理する
+                        $breakStartTimes = explode(',', $attendance->break_start_times);
+                        $breakEndTimes = explode(',', $attendance->break_end_times);
+
+                        $totalBreakTimeInSeconds = 0;
+                        // 各休憩時間の差分を合計する
+                        for ($i = 0; $i < count($breakStartTimes); $i++) {
+                            $startBreak = strtotime($breakStartTimes[$i]);
+                            $endBreak = strtotime($breakEndTimes[$i]);
+                            $totalBreakTimeInSeconds += $endBreak - $startBreak;
+                        }
+                        // 勤務時間から休憩時間を引く
+                        $totalWorkTimeInSeconds -= $totalBreakTimeInSeconds;
+
+                        $hours = floor($totalWorkTimeInSeconds / 3600);
+                        $minutes = floor(($totalWorkTimeInSeconds % 3600) / 60);
+                        $seconds = $totalWorkTimeInSeconds % 60;
+                        // ゼロパディングして2桁表示にする
+                        $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
+                        $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
+                        $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
+                        echo $formattedHours . ':' . $formattedMinutes . ':' . $formattedSeconds;
+                    } else {
+                        // 勤務時間が打刻されていない場合は何も表示しない
+                        echo '';
                     }
-                       // 勤務時間から休憩時間を引く
-                    $totalWorkTimeInSeconds -= $totalBreakTimeInSeconds;
-
-                    $hours = floor($totalWorkTimeInSeconds / 3600);
-                    $minutes = floor(($totalWorkTimeInSeconds % 3600) / 60);
-                    $seconds = $totalWorkTimeInSeconds % 60;
-                    // ゼロパディングして2桁表示にする
-                    $formattedHours = str_pad($hours, 2, '0', STR_PAD_LEFT);
-                    $formattedMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
-                    $formattedSeconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
                     ?>
-                    {{ $formattedHours }}:{{ $formattedMinutes }}:{{ $formattedSeconds }}
                 </td>
             </tr>
             @endforeach
@@ -106,9 +128,8 @@
                 <td colspan="5">勤怠データがありません</td>
             </tr>
             @endif
-
-
         </table>
+        {{ $attendanceData->links('vendor.pagination.custom') }}
     </div>
 </div>
 @endsection
