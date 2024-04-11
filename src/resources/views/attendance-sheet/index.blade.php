@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/attendance.css')}}">
+<link rel="stylesheet" href="{{ asset('css/attendance-sheet/index.css')}}">
 @endsection
 
 @section('link')
@@ -21,29 +21,35 @@
 @endsection
 
 @section('content')
-<div class="attendance-form">
-    <h2 class="attendance-form__heading content__heading"></h2>
-    <div class="attendance-form__container">
-        <div class="date-navigation">
-            <a href="{{ route('attendance', ['date' => $previousDate]) }}" class="date-navigation__button">&lt;</a>
-            <span class="current-date">{{ $selectedDate }}</span>
-            <a href="{{ route('attendance', ['date' => $nextDate]) }}" class="date-navigation__button">&gt;</a>
-        </div>
-        <table class="attendance__table">
-            <tr class="attendance__row">
-                <th class="attendance__label">名前</th>
-                <th class="attendance__label">勤務開始</th>
-                <th class="attendance__label">勤務終了</th>
-                <th class="attendance__label">休憩時間</th>
-                <th class="attendance__label">勤務時間</th>
+<div class="attendance-sheet-form">
+    @if(isset($user))
+    <h2 class="attendance-sheet-form__heading content__heading">{{ $user->name }}さんの{{ date('Y年n月', strtotime($selectedMonth)) }}勤怠表</h2>
+    @else
+    <h2 class="attendance-sheet-form__heading content__heading">社員を選択して下さい</h2>
+    @endif
+    <div class="attendance-sheet-form__select-month">
+        <form action="{{ route('attendance.sheet', ['id' => $user->id]) }}" method="GET">
+            <label for="month">月を選択：</label>
+            <input type="month" id="month" name="month">
+            <button type="submit">表示</button>
+        </form>
+    </div>
+    <div class="attendance-sheet-form__container">
+        <table class="attendance-sheet__table">
+            <tr class="attendance-sheet__row">
+                <th class="attendance-sheet__label">日付</th>
+                <th class="attendance-sheet__label">勤務開始</th>
+                <th class="attendance-sheet__label">勤務終了</th>
+                <th class="attendance-sheet__label">休憩時間</th>
+                <th class="attendance-sheet__label">勤務時間</th>
             </tr>
             @if($attendanceData->isNotEmpty())
             @foreach($attendanceData as $attendance)
             <tr class="attendance__row">
-                <td class="attendance__data">{{ $attendance->user_name }}</td>
-                <td class="attendance__data">{{ $attendance->start_time }}</td>
-                <td class="attendance__data">{{ $attendance->end_time }}</td>
-                <td class="attendance__data">
+                <td class="attendance-sheet__data">{{ $attendance->stamp_date->format('Y-m-d')}}</td>
+                <td class="attendance-sheet__data">{{ $attendance->start_time }}</td>
+                <td class="attendance-sheet__data">{{ $attendance->end_time }}</td>
+                <td class="attendance-sheet__data">
                     <?php
                     // 休憩開始時刻と終了時刻を取得する
                     $breakStartTimes = explode(',', $attendance->break_start_times);
@@ -85,7 +91,7 @@
 
 
 
-                <td class="attendance__data">
+                <td class="attendance-sheet__data">
                     <?php
                     $startTime = strtotime($attendance->start_time);
                     $endTime = strtotime($attendance->end_time);
@@ -130,7 +136,6 @@
             </tr>
             @endif
         </table>
-        {{ $attendanceData->links('vendor.pagination.custom') }}
     </div>
 </div>
 @endsection
