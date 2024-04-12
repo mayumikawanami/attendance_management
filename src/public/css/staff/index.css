@@ -27,9 +27,11 @@
 }
 
 .staff-list__table {
-    width: 100%;
+    width: 50%;
     border-collapse: collapse;
     text-align: center;
+    margin: 0 auto;
+    list-style: none;
 }
 
 .staff-list__row {
@@ -45,16 +47,19 @@
 }
 
 .staff-list__label {
-    padding: 20px;
+    padding: 30px;
     font-weight: bold;
 }
 
 .staff-list__data {
-    padding: 20px;
+    padding: 30px;
     font-weight: bold;
     text-align: center;
 }
 
+.staff-list__data a{
+    text-decoration: none;
+}
 .current-date {
     font-weight: bold;
     font-size: 20px;
@@ -64,4 +69,18 @@ svg.w-5.h-5 {
     /*paginateメソッドの矢印の大きさ調整のために追加*/
     width: 30px;
     height: 30px;
+}
+
+.no-data-row {
+    /* 背景色を灰色に設定 */
+    color: #888;
+    /* テキストの色を灰色に設定 */
+    font-style: italic;
+    /* 斜体でテキストを表示 */
+    text-align: center;
+    line-height: 300px;
+
+}
+.a{
+    list-style: none;
 }

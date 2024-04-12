@@ -44,12 +44,12 @@
 }
 
 .attendance__label {
-    padding: 20px;
+    padding: 30px;
     font-weight: bold;
 }
 
 .attendance__data {
-    padding: 20px;
+    padding: 30px;
     font-weight: bold;
     text-align: center;
 }
@@ -62,4 +62,15 @@ svg.w-5.h-5 {
     /*paginateメソッドの矢印の大きさ調整のために追加*/
     width: 30px;
     height: 30px;
+}
+
+.no-data-row {
+    /* 背景色を灰色に設定 */
+    color: #888;
+    /* テキストの色を灰色に設定 */
+    font-style: italic;
+    /* 斜体でテキストを表示 */
+    text-align: center;
+    line-height: 300px;
+
 }

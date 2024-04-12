@@ -5,17 +5,14 @@
         /* 水平方向の中央寄せ */
     align-items: center;
         /* 垂直方向の中央寄せ */
-    margin: 40px 0 90px;
-        /* 上下のマージンを指定 */
     }
 
 
 .stamp-form__container button {
     width: 40%;
     box-sizing: border-box;
-    margin-right: 30px;
-    margin-bottom: 40px;
-    line-height: 200px;
+    margin: 20px 20px ;
+    line-height: 250px;
     border: none;
     font-size: 20px;
     font-weight: bold;
@@ -42,4 +39,17 @@
 .alert-danger{
     text-align: center;
     color: rgba(239, 22, 14, 0.908);
+}
+
+.login-button{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    background: #1631e6;
+    padding: 10px;
+
+}
+.stamp-form__login-button{
+    margin: 10px auto;
+    text-align: center;
 }

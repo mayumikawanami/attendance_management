@@ -8,21 +8,23 @@
 <ul class="header-nav">
     <li class="header-nav__item">
         <a class="header-nav__link" href="/">ホーム</a>
-        <a class="header-nav__link" href="/attendance">日付一覧</a>
+        <a class="header-nav__link" href="/attendance">日付別勤怠</a>
         <a class="header-nav__link" href="/staff">社員一覧</a>
     </li>
+    @if(auth()->check())
     <li class="header-nav__item">
         <form action="/logout" method="post">
             @csrf
             <input class="header-nav__link" type="submit" value="ログアウト">
         </form>
     </li>
+    @endif
 </ul>
 @endsection
 
 @section('content')
 <div class="staff-list-form">
-    <h2 class="staff-list-form__heading content__heading">社員一覧</h2>
+    <h2 class="staff-list-form__heading content__heading">--- 社員一覧 ---</h2>
 
     <div class="staff-list-form__container">
         <table class="staff-list__table">
@@ -40,7 +42,7 @@
             </tr>
             @endforeach
             @else
-            <tr>
+            <tr class="no-data-row">
                 <td colspan="5">社員データがありません</td>
             </tr>
             @endif

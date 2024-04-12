@@ -1,12 +1,15 @@
 .attendance-sheet-form {
-    margin-top: 20px;
-    padding: 0 130px;
+    margin: 20px auto;
+
 }
 
 .attendance-sheet-form__container {
     margin-top: 20px;
 }
 
+.attendance-sheet-form__select-month{
+    margin-left: 50px;
+}
 
 .date-navigation {
     margin-bottom: 20px;
@@ -28,9 +31,9 @@
 }
 
 .attendance-sheet__table {
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
-    text-align: center;
+    margin: 10px auto;
 }
 
 .attendance-sheet__row {
@@ -46,12 +49,17 @@
 }
 
 .attendance-sheet__label {
-    padding: 20px;
+    padding: 30px;
     font-weight: bold;
 }
 
 .attendance-sheet__data {
-    padding: 20px;
+    border: 1px solid #888585;
+    border-left: none;
+        /* 左側の境界線を削除 */
+    border-right: none;
+        /* 右側の境界線を削除 */
+    padding: 30px;
     font-weight: bold;
     text-align: center;
 }
@@ -65,4 +73,47 @@ svg.w-5.h-5 {
     /*paginateメソッドの矢印の大きさ調整のために追加*/
     width: 30px;
     height: 30px;
+}
+
+.select-month_btn {
+    cursor: pointer;
+    background: #888585;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+    box-shadow: none;
+}
+
+.select-month_input {
+    font-size: 16px;
+    width: 150px;
+    height: 30px;
+    padding: 8px;
+    border: 1px solid #5e5c5c;
+    border-radius: 4px;
+    cursor: pointer;
+    /* ホバー時のボーダー */
+    transition: border-color 0.3s ease;
+}
+/* ホバー時のスタイル */
+.select-month_input:hover {
+    border-color: #999;
+}
+
+/* フォーカス時のスタイル */
+.select-month_input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.no-data-row {
+    /* 背景色を灰色に設定 */
+    color: #888;
+    /* テキストの色を灰色に設定 */
+    font-style: italic;
+    /* 斜体でテキストを表示 */
+    text-align: center;
+    line-height: 300px;
+
 }

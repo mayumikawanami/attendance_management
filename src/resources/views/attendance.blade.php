@@ -8,21 +8,23 @@
 <ul class="header-nav">
     <li class="header-nav__item">
         <a class="header-nav__link" href="/">ホーム</a>
-        <a class="header-nav__link" href="/attendance">日付一覧</a>
+        <a class="header-nav__link" href="/attendance">日付別勤怠</a>
         <a class="header-nav__link" href="/staff">社員一覧</a>
     </li>
+    @if(auth()->check())
     <li class="header-nav__item">
         <form action="/logout" method="post">
             @csrf
             <input class="header-nav__link" type="submit" value="ログアウト">
         </form>
     </li>
+    @endif
 </ul>
 @endsection
 
 @section('content')
 <div class="attendance-form">
-    <h2 class="attendance-form__heading content__heading"></h2>
+    <h2 class="attendance-form__heading content__heading">--- 日付別勤怠 ---</h2>
     <div class="attendance-form__container">
         <div class="date-navigation">
             <a href="{{ route('attendance', ['date' => $previousDate]) }}" class="date-navigation__button">&lt;</a>
@@ -125,7 +127,7 @@
             </tr>
             @endforeach
             @else
-            <tr>
+            <tr class="no-data-row">
                 <td colspan="5">勤怠データがありません</td>
             </tr>
             @endif

@@ -8,30 +8,32 @@
 <ul class="header-nav">
     <li class="header-nav__item">
         <a class="header-nav__link" href="/">ホーム</a>
-        <a class="header-nav__link" href="/attendance">日付一覧</a>
+        <a class="header-nav__link" href="/attendance">日付別勤怠</a>
         <a class="header-nav__link" href="/staff">社員一覧</a>
     </li>
+    @if(auth()->check())
     <li class="header-nav__item">
         <form action="/logout" method="post">
             @csrf
             <input class="header-nav__link" type="submit" value="ログアウト">
         </form>
     </li>
+    @endif
 </ul>
 @endsection
 
 @section('content')
 <div class="attendance-sheet-form">
     @if(isset($user))
-    <h2 class="attendance-sheet-form__heading content__heading">{{ $user->name }}さんの{{ date('Y年n月', strtotime($selectedMonth)) }}勤怠表</h2>
+    <h2 class="attendance-sheet-form__heading content__heading">{{ $user->name }}さんの勤怠表　〜{{ date('Y年n月', strtotime($selectedMonth))}}〜</h2>
     @else
     <h2 class="attendance-sheet-form__heading content__heading">社員を選択して下さい</h2>
     @endif
     <div class="attendance-sheet-form__select-month">
         <form action="{{ route('attendance.sheet', ['id' => $user->id]) }}" method="GET">
             <label for="month">月を選択：</label>
-            <input type="month" id="month" name="month">
-            <button type="submit">表示</button>
+            <input class="select-month_input" type="month" id="month" name="month">
+            <button class="select-month_btn" type="submit">表示</button>
         </form>
     </div>
     <div class="attendance-sheet-form__container">
@@ -43,7 +45,7 @@
                 <th class="attendance-sheet__label">休憩時間</th>
                 <th class="attendance-sheet__label">勤務時間</th>
             </tr>
-            @if($attendanceData->isNotEmpty())
+            @if($attendanceData ->isNotEmpty())
             @foreach($attendanceData as $attendance)
             <tr class="attendance__row">
                 <td class="attendance-sheet__data">{{ $attendance->stamp_date->format('Y-m-d')}}</td>
@@ -131,7 +133,7 @@
             </tr>
             @endforeach
             @else
-            <tr>
+            <tr class="no-data-row">
                 <td colspan="5">勤怠データがありません</td>
             </tr>
             @endif

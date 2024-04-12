@@ -25,17 +25,31 @@ use App\Http\Controllers\AttendanceSheetController;
     Route::get('/', [AttendanceController::class, 'index']);
     Route::post('/record', [AttendanceController::class, 'record']);
     Route::get('/attendance', [AttendanceController::class, 'attendance'])->name('attendance');
+
     Route::get('/staff', [StaffListController::class, 'index'])->name('staff.index');
+
     Route::get('/attendance-sheet/{id}', [AttendanceSheetController::class, 'index'])->name('attendance.sheet');
     Route::get('/attendance-sheet/index', [AttendanceSheetController::class, 'index'])->name('attendance.index');
 
 
 
 
-    Route::get('/register',[RegisteredUserController::class, 'create']);
+    // 認証関連のルート
+    Route::middleware(['auth'])->group(function () {
+    // ログアウトルート
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
+
+    // ログインしていないユーザー向けのルート
+    Route::middleware(['guest'])->group(function () {
+    // 登録フォーム表示ルート
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    // 登録フォーム送信ルート
     Route::post('/register', [RegisteredUserController::class, 'store']);
-    Route::get('/login', [AuthenticatedSessionController::class, 'create']);
+    // ログインフォーム表示ルート
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    // ログインフォーム送信ルート
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+});
 
 
