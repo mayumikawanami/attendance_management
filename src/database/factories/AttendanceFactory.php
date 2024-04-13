@@ -14,8 +14,8 @@ class AttendanceFactory extends Factory
      */
     public function definition()
     {
-        $userId = $this->faker->numberBetween(1, 10);
-        $stampDate = $this->faker->dateTimeBetween('-5 days', 'now')->format('Y-m-d');
+        $userId = $this->faker->numberBetween(1, 20);
+        $stampDate = $this->faker->dateTimeBetween('-60 days', 'now')->format('Y-m-d');
         $actions = ['startWork', 'endWork'];
 
         $action = $this->faker->randomElement($actions);

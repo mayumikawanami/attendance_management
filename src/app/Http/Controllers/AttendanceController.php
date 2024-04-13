@@ -63,6 +63,8 @@ class AttendanceController extends Controller
             ->groupBy('users.name', 'stamp_date') // ユーザー名と日付でグループ化
             ->paginate(5); // ページネーションで1ページあたり5件表示
 
+        $attendanceData->appends(['date' => $selectedDate]); // 日付情報をページネーションのリンクに追加
+
         return view('attendance', compact('selectedDate', 'previousDate', 'nextDate', 'attendanceData'));
     }
 
