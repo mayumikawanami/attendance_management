@@ -40,16 +40,12 @@ use App\Http\Controllers\AttendanceSheetController;
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
-    // ログインしていないユーザー向けのルート
-    Route::middleware(['guest'])->group(function () {
-    // 登録フォーム表示ルート
-    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-    // 登録フォーム送信ルート
-    Route::post('/register', [RegisteredUserController::class, 'store']);
-    // ログインフォーム表示ルート
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    // ログインフォーム送信ルート
-    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-});
+
+
+Route::get('/register', [RegisteredUserController::class, 'create']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::get('/login', [AuthenticatedSessionController::class, 'create']);
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 
