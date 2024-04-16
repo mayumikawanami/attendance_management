@@ -43,7 +43,7 @@ Atte（アット）は企業の勤怠管理システムです。
 
 ## 環境構築
 **Dockerビルド**
-1. `git clone gitgit@github.com:mayumikawanami/attendance_management.git`
+1. `git clone git@github.com:mayumikawanami/attendance_management.git`
 2. DockerDesktopアプリを立ち上げます。
 3. `docker-compose up -d --build` を実行します。
 
