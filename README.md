@@ -30,10 +30,10 @@ Atte（アット）は企業の勤怠管理システムです。
 ## 使用技術(実行環境)
 - Apache 2.4.56
 - Nginx 1.21.1
-- PHP 8.2.15
+- PHP 8.2.17
 - Composer 2.7.2
 - Laravel 8.83.27
-- MySQL 8.0.36
+- MySQL 8.0.26
 
 ## テーブル設計
 ![alt text](attendance_management_table_design.png)

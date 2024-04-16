@@ -29,15 +29,13 @@
         {{ session('success') }}
     </div>
     @endif
-    @if ($errors->has('action'))
-    <div class="alert-danger">
-        <ul>
-            @foreach ($errors->get('action') as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+
+    @if(session('warning'))
+    <div class="alert-warning">
+        {{ session('warning') }}
     </div>
     @endif
+
     @if(auth()->check())
     <h2 class="stamp-form__heading content__heading">{{ auth()->user()->name }}さんお疲れ様です！</h2>
     @else
