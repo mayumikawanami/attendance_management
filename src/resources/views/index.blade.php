@@ -6,12 +6,12 @@
 
 @section('link')
 <ul class="header-nav">
+    @if(auth()->check())
     <li class="header-nav__item">
         <a class="header-nav__link" href="/">ホーム</a>
         <a class="header-nav__link" href="/attendance">日付別勤怠</a>
         <a class="header-nav__link" href="/staff">社員一覧</a>
     </li>
-    @if(auth()->check())
     <li class="header-nav__item">
         <form action="/logout" method="post">
             @csrf
