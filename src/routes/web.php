@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\RegisteredUserController;
@@ -8,6 +9,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\StaffListController;
 use App\Http\Controllers\AttendanceSheetController;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,8 @@ use App\Http\Controllers\AttendanceSheetController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 
 
 
@@ -45,7 +50,30 @@ use App\Http\Controllers\AttendanceSheetController;
 Route::get('/register', [RegisteredUserController::class, 'create']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/login', [AuthenticatedSessionController::class, 'create']);
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+// '/' にリダイレクトするためのルートを追加
+Route::redirect('/home', '/');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
+Auth::routes();
 
+// Route::get('/auth/verify', function () {
+//     return view('auth.verify');
+// })->middleware('auth')->name('auth.verify');
+
+// // Eメールの再送信ルートを手動で定義
+// Route::get('/email/verify', function () {
+//     return view('auth.verify');
+// })->middleware(['auth', 'verified'])->name('verification.notice
+// ');
+
+// Route::get('/email/verify/resend', function (Request $request) {
+//     $user = $request->user();
+//     if ($user->hasVerifiedEmail()) {
+//         return redirect()->route('auth.verify')->with('verified', true);
+//     }
+
+//     $user->sendEmailVerificationNotification();
+
+//     return back()->with('resent', true);
+// })->middleware(['auth', 'throttle:6,1'])->name('auth.resend');

@@ -28,6 +28,13 @@
             </div>
             <input class="login-form__btn btn" type="submit" value="ログイン">
         </form>
+        <div class="demo-account-info" style="margin-top: 20px; color: #d00; text-align: center;">
+        <strong>【デモログイン用アカウント】</strong><br>
+            デモユーザー1：demo1@example.com / password<br>
+            デモユーザー2：demo2@example.com / password<br>
+            デモユーザー3：demo3@example.com / password
+</div>
+
         <div class="registration-options">
             <p class="registration_guidance">アカウントをお持ちでない方はこちらから</p>
             <a class="register-button" href="/register">会員登録</a>

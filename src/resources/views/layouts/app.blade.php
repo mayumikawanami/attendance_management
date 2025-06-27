@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance_management</title>
-    <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
+    <!-- <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" /> -->
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
     @yield('css')
 </head>
@@ -15,6 +15,7 @@
             @yield('link')
         </div>
         <div class="content">
+            <div style="color: red; text-align: center; font-weight: bold; background-color:pink">こちらはデモ画面です</div>
         @yield('content')
         </div>
         <div class="footer">

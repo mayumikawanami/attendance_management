@@ -18,7 +18,7 @@ class CreateAttendancesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('stamp_date')->default(now());;
-            $table->string('action');
+            $table->string('action')->nullable();
             $table->time('start_time')->nullable(); // 勤務開始時刻
             $table->time('end_time')->nullable(); // 勤務終了時刻
             $table->time('break_start_time')->nullable(); // 休憩開始時刻

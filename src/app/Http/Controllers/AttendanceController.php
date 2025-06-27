@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Http\Requests\AttendanceRequest;
-use Carbon\Carbon; // Carbonライブラリを使用するために追加
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 
 class AttendanceController extends Controller
@@ -113,31 +110,31 @@ class AttendanceController extends Controller
         ->first();
 
         // 直前の打刻アクションがある場合、一定時間内の連続クリックをチェック
-        if ($lastAction) {
-            $timeThreshold = $lastAction->created_at->addSeconds(7); // 一定時間内のクリックを制限する時間
-            if (now()->lt($timeThreshold)) {
-                // アクションごとに異なる警告メッセージを設定
-                switch ($formData['action']) {
-                    case 'startWork':
-                        $warningMessage = "連続クリックのため 最初の打刻で勤務開始しました";
-                        break;
-                    case 'endWork':
-                        $warningMessage = "連続クリックのため 最初の打刻で勤務終了しました";
-                        break;
-                    case 'startBreak':
-                        $warningMessage = "連続クリックのため 最初の打刻で休憩開始しました";
-                        break;
-                    case 'endBreak':
-                        $warningMessage = "連続クリックのため 最初の打刻で休憩終了しました";
-                        break;
-                        // 他のボタンに対する処理も追加できます
-                    default:
-                        $warningMessage = '一定時間内の連続クリックは無効です。';
-                }
+        // if ($lastAction) {
+        //     $timeThreshold = $lastAction->created_at->addSeconds(7); // 一定時間内のクリックを制限する時間
+        //     if (now()->lt($timeThreshold)) {
+        //         // アクションごとに異なる警告メッセージを設定
+        //         switch ($formData['action']) {
+        //             case 'startWork':
+        //                 $warningMessage = "連続クリックのため 最初の打刻で勤務開始しました";
+        //                 break;
+        //             case 'endWork':
+        //                 $warningMessage = "連続クリックのため 最初の打刻で勤務終了しました";
+        //                 break;
+        //             case 'startBreak':
+        //                 $warningMessage = "連続クリックのため 最初の打刻で休憩開始しました";
+        //                 break;
+        //             case 'endBreak':
+        //                 $warningMessage = "連続クリックのため 最初の打刻で休憩終了しました";
+        //                 break;
+        //                 // 他のボタンに対する処理も追加できます
+        //             default:
+        //                 $warningMessage = '一定時間内の連続クリックは無効です。';
+        //         }
 
-                return redirect()->back()->with('warning', $warningMessage);
-            }
-        }
+        //         return redirect()->back()->with('warning', $warningMessage);
+        //     }
+        // }
 
         // 休憩開始が打刻されている場合は、休憩時間を計算する
         if ($formData['action'] == 'startBreak') {
