@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -17,7 +18,7 @@ class AuthenticatedSessionController extends Controller
         // ユーザーログイン処理
         if (Auth::attempt($request->only('email', 'password'))) {
             // ログイン成功時の処理
-            return redirect('/'); // ログイン後に遷移する先を指定
+            return redirect(RouteServiceProvider::HOME); // ログイン後に遷移する先を指定
         } else {
             // ログイン失敗時の処理
             return back()->withErrors(['email' => 'ログインに失敗しました。']); // ログインページにエラーを表示

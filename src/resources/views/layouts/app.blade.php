@@ -15,7 +15,6 @@
             @yield('link')
         </div>
         <div class="content">
-            <div style="color: red; text-align: center; font-weight: bold; background-color:pink">こちらはデモ画面です</div>
         @yield('content')
         </div>
         <div class="footer">

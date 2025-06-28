@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
@@ -22,7 +23,7 @@ class RegisteredUserController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/login');
+        return redirect(RouteServiceProvider::HOME);
 
     }
 

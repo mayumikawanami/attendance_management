@@ -7,13 +7,13 @@
 @section('link')
 <ul class="header-nav">
     <li class="header-nav__item">
-        <a class="header-nav__link" href="/">ホーム</a>
-        <a class="header-nav__link" href="/attendance">日付別勤怠</a>
-        <a class="header-nav__link" href="/staff">社員一覧</a>
+        <a class="header-nav__link" href="{{ url('/') }}">ホーム</a>
+        <a class="header-nav__link" href="{{ route('attendance') }}">日付別勤怠</a>
+        <a class="header-nav__link" href="{{ route('staff.index') }}">社員一覧</a>
     </li>
     @if(auth()->check())
     <li class="header-nav__item">
-        <form action="/logout" method="post">
+        <form action="{{ route('logout') }}" method="post">
             @csrf
             <input class="header-nav__link" type="submit" value="ログアウト">
         </form>

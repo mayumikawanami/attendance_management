@@ -5,10 +5,11 @@
 @endsection
 
 @section('content')
+<div style="color: red; text-align: center; font-weight: bold; background-color:pink">デモ画面です</div>
 <div class="login-form">
     <h2 class="login-form__heading content__heading">ログイン</h2>
     <div class="login-form__inner">
-        <form class="login-form__form" action="/login" method="post">
+        <form class="login-form__form" action="{{ route('login') }}" method="post">
             @csrf
             <div class="login-form__group">
                 <input class="login-form__input" type="mail" name="email" id="email" placeholder="メールアドレス" value="{{ old('email') }}">
@@ -29,15 +30,14 @@
             <input class="login-form__btn btn" type="submit" value="ログイン">
         </form>
         <div class="demo-account-info" style="margin-top: 20px; color: #d00; text-align: center;">
-        <strong>【デモログイン用アカウント】</strong><br>
+            <strong>【デモログイン用アカウント】</strong><br>
             デモユーザー1：demo1@example.com / password<br>
             デモユーザー2：demo2@example.com / password<br>
             デモユーザー3：demo3@example.com / password
-</div>
-
+        </div>
         <div class="registration-options">
             <p class="registration_guidance">アカウントをお持ちでない方はこちらから</p>
-            <a class="register-button" href="/register">会員登録</a>
+            <a class="register-button" href="{{ url('/register') }}">会員登録</a>
         </div>
     </div>
 </div>
